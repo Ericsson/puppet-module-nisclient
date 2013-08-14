@@ -1,0 +1,5 @@
+fixtures:
+  repositories:
+    "rpcbind": "git://github.com/ghoneycutt/puppet-module-rpcbind.git"
+  symlinks:
+    "nisclient": "#{source_dir}"

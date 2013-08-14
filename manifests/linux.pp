@@ -77,7 +77,7 @@ class nisclient::linux {
       owner   => root,
       group   => root,
       mode    => 0644,
-      content => template('nisclient/defaultdomain.erb'),
+      content => "${domainname}\n"
     }
   }
 

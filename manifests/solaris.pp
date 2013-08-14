@@ -3,6 +3,7 @@
 class nisclient::solaris {
   
   $domainname = $nisclient::domainname
+  $server = $nisclient::server
   $package_ensure = $nisclient::package_ensure
   $package_name = $nisclient::package_name
   $service_ensure = $nisclient::service_ensure
@@ -51,7 +52,7 @@ class nisclient::solaris {
     owner   => root,
     group   => root,
     mode    => 0644,
-    content => template('nisclient/defaultdomain.erb'),
+    content => "${domainname}\n",
   }
 
   if $service_ensure == 'stopped' {

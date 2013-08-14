@@ -10,10 +10,10 @@ class nisclient(
 ) {
 
   case $::kernel {
-    'linux': {
+    'Linux': {
       include nisclient::linux
     }
-    'solaris': {
+    'SunOS': {
       include nisclient::solaris
     }
     default: {
