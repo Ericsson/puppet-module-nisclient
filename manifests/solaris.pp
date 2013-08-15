@@ -1,14 +1,17 @@
 # == Class: nisclient::solaris
 #
 class nisclient::solaris {
-  
-  $domainname = $nisclient::domainname
-  $server = $nisclient::server
-  $package_ensure = $nisclient::package_ensure
-  $package_name = $nisclient::package_name
-  $service_ensure = $nisclient::service_ensure
-  $service_name = $nisclient::service_name
 
+  $domainname     = $nisclient::domainname
+  $server         = $nisclient::server
+  $package_ensure = $nisclient::package_ensure
+  $package_name   = $nisclient::package_name
+  $service_ensure = $nisclient::service_ensure
+  $service_name   = $nisclient::service_name
+
+  $default_package_name = [ 'SUNWnisr',
+                            'SUNWnisu',
+                          ]
   $default_service_name = 'nis/client'
 
   if $service_name == undef {
@@ -26,32 +29,37 @@ class nisclient::solaris {
           '/var/yp/binding',
           "/var/yp/binding/${domainname}"]:
     ensure => directory,
-    owner  => root,
-    group  => root,
-    mode   => 0644,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
   }
 
   file { "/var/yp/binding/${domainname}/ypservers":
     ensure  => present,
-    owner   => root,
-    group   => root,
-    mode    => 0644,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
     require => File["/var/yp/binding/${domainname}"],
     notify  => Exec['domainname'],
     content => "${server}\n",
   }
 
   exec { 'domainname':
-    command     => "/usr/bin/domainname ${domainname}",
+    command     => "domainname ${domainname}",
+    path        => [ '/bin',
+                      '/usr/bin',
+                      '/sbin',
+                      '/usr/sbin',
+                    ],
     refreshonly => true,
     notify      => Service['nis_service'],
   }
 
   file { '/etc/defaultdomain':
     ensure  => present,
-    owner   => root,
-    group   => root,
-    mode    => 0644,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
     content => "${domainname}\n",
   }
 
@@ -66,5 +74,4 @@ class nisclient::solaris {
     enable => $service_enable,
     name   => $my_service_name,
   }
-
 }

@@ -6,7 +6,7 @@ class nisclient(
   $package_ensure = 'installed',
   $package_name   = undef,
   $service_ensure = 'running',
-  $service_name   = undef
+  $service_name   = undef,
 ) {
 
   case $::kernel {
@@ -17,8 +17,7 @@ class nisclient(
       include nisclient::solaris
     }
     default: {
-      fail("${module_name} is only supported on Linux and Solaris. Not on ${::kernel}")
+      fail("nisclient is only supported on Linux and Solaris kernels. Detected kernel is <${::kernel}>")
     }
   }
-
 }

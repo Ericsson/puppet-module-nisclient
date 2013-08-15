@@ -2,12 +2,12 @@
 #
 class nisclient::linux {
 
-  $domainname = $nisclient::domainname
-  $server = $nisclient::server
+  $domainname     = $nisclient::domainname
+  $server         = $nisclient::server
   $package_ensure = $nisclient::package_ensure
-  $package_name = $nisclient::package_name
+  $package_name   = $nisclient::package_name
   $service_ensure = $nisclient::service_ensure
-  $service_name = $nisclient::service_name
+  $service_name   = $nisclient::service_name
 
   $default_service_name = 'ypbind'
 
@@ -23,8 +23,6 @@ class nisclient::linux {
     }
   }
 
-  include rpcbind
-
   if $service_name == undef {
     $my_service_name = $default_service_name
   } else {
@@ -35,6 +33,8 @@ class nisclient::linux {
   } else {
     $my_package_name = $package_name
   }
+
+  include rpcbind
 
   package { 'nis_package':
     ensure => installed,
@@ -52,21 +52,34 @@ class nisclient::linux {
   }
 
   exec { 'ypdomainname':
-    command     => "/bin/ypdomainname ${domainname}",
+    command     => "ypdomainname ${domainname}",
+    path        => [ '/bin',
+                      '/usr/bin',
+                      '/sbin',
+                      '/usr/sbin',
+                    ],
     refreshonly => true,
     notify      => Service['nis_service'],
   }
 
   if $::osfamily == 'redhat' {
     exec { 'set_nisdomain':
-      path    => '/bin',
       command => "echo NISDOMAIN=${domainname} >> /etc/sysconfig/network",
+      path    => [ '/bin',
+                    '/usr/bin',
+                    '/sbin',
+                    '/usr/sbin',
+                  ],
       unless  => 'grep ^NISDOMAIN /etc/sysconfig/network',
     }
 
     exec { 'change_nisdomain':
       command => "sed -i 's/^NISDOMAIN.*/NISDOMAIN=${domainname}/' /etc/sysconfig/network",
-      path    => '/bin',
+      path    => [ '/bin',
+                    '/usr/bin',
+                    '/sbin',
+                    '/usr/sbin',
+                  ],
       unless  => "grep ^NISDOMAIN=${domainname} /etc/sysconfig/network",
       onlyif  => 'grep ^NISDOMAIN /etc/sysconfig/network',
     }
@@ -74,9 +87,9 @@ class nisclient::linux {
   elsif $::osfamily =~ /Suse|Debian/ {
     file { '/etc/defaultdomain':
       ensure  => present,
-      owner   => root,
-      group   => root,
-      mode    => 0644,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
       content => "${domainname}\n"
     }
   }
@@ -92,5 +105,4 @@ class nisclient::linux {
     enable => $service_enable,
     name   => $my_service_name,
   }
-
 }
