@@ -3,17 +3,20 @@ puppet-module-nisclient
 
 Puppet module to manage a NIS client
 
+[![Build Status](https://travis-ci.org/Ericsson/puppet-module-nisclient.png?branch=master)](https://travis-ci.org/Ericsson/puppet-module-nisclient)
 
-=== Parameters
+===
+
+# Parameters
 
 domainname
---------------
+----------
 NIS domain name
 
 - *Default*: example.com
 
 server
---------------
+------
 NIS server hostname or IP
 
 - *Default*: 127.0.0.1
@@ -25,7 +28,7 @@ ensure attribute for NIS client package
 - *Default*: installed
 
 package_name
---------------
+------------
 name of NIS client package
 
 - *Default*: undef (OS default)
@@ -37,8 +40,7 @@ ensure attribute for NIS client service
 - *Default*: running
 
 service_name
---------------
+------------
 name of NIS client service
 
 - *Default*: undef (OS default)
-
