@@ -1,12 +1,14 @@
 require 'spec_helper'
 describe 'nisclient' do
-  let :facts do
-    { :kernel => 'Linux',
-      :osfamily => 'RedHat'
-    }
-  end
 
   describe 'when using default values for class' do
+    let :facts do
+      { :domain   => 'example.com',
+        :kernel   => 'Linux',
+        :osfamily => 'RedHat',
+      }
+    end
+
     it {
       should contain_file('/etc/yp.conf').with({
         'ensure' => 'present',
@@ -18,7 +20,7 @@ describe 'nisclient' do
       should contain_file('/etc/yp.conf').with_content(
 %{domain example.com server 127.0.0.1\n})
     }
-    it { 
+    it {
       should contain_package('nis_package').with({
         'ensure' => 'installed',
         'name'   => 'ypbind',
@@ -28,23 +30,31 @@ describe 'nisclient' do
 
   describe 'when using default values for class on Suse' do
     let :facts do
-      { :kernel   => 'Linux',
-        :osfamily => 'Suse' }
+      {
+        :domain   => 'example.com',
+        :kernel   => 'Linux',
+        :osfamily => 'Suse',
+      }
     end
-    it { 
+
+    it {
       should contain_package('nis_package').with({
         'ensure' => 'installed',
         'name'   => 'ypbind',
       })
     }
   end
-  
+
   describe 'when using default values for class on Ubuntu' do
     let :facts do
-      { :kernel   => 'Linux',
-        :osfamily => 'Debian' }
+      {
+        :domain   => 'example.com',
+        :kernel   => 'Linux',
+        :osfamily => 'Debian',
+      }
     end
-    it { 
+
+    it {
       should contain_package('nis_package').with({
         'ensure' => 'installed',
         'name'   => 'nis',
@@ -53,6 +63,12 @@ describe 'nisclient' do
   end
 
   describe 'with parameter domainname set' do
+    let :facts do
+      {
+        :kernel   => 'Linux',
+        :osfamily => 'RedHat',
+      }
+    end
     let :params do
       { :domainname => 'rnd.example.com' }
     end
@@ -71,6 +87,13 @@ describe 'nisclient' do
   end
 
   describe 'with parameter server set' do
+    let :facts do
+      {
+        :domain   => 'example.com',
+        :kernel   => 'Linux',
+        :osfamily => 'RedHat',
+      }
+    end
     let :params do
       { :server => '192.168.1.1' }
     end
@@ -87,14 +110,17 @@ describe 'nisclient' do
 %{domain example.com server 192.168.1.1\n})
     }
   end
+
   describe 'with parameters server and domainname set on solaris' do
     let :params do
       { :server     => 'localhost',
         :domainname => 'rnd.example.com' }
     end
     let :facts do
-      { :kernel   => 'SunOS',
-        :osfamily => 'Solaris' }
+      { :domain   => 'example.com',
+        :kernel   => 'SunOS',
+        :osfamily => 'Solaris',
+      }
     end
 
     it {
@@ -121,4 +147,3 @@ describe 'nisclient' do
     }
   end
 end
-

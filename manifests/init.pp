@@ -1,7 +1,7 @@
 # == Class: nisclient
 #
 class nisclient(
-  $domainname     = 'example.com',
+  $domainname     = $::domain,
   $server         = '127.0.0.1',
   $package_ensure = 'installed',
   $package_name   = undef,
