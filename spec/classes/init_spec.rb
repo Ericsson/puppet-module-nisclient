@@ -37,20 +37,20 @@ describe 'nisclient' do
       }
     end
 
-    it {
-      should contain_package('nis_package').with({
-        'ensure' => 'installed',
-        'name'   => 'ypbind',
-      })
-    }
+    it 'should fail' do
+      expect {
+        should include_class('rpcbind')
+      }.to raise_error(Puppet::Error,/rpcbind supports osfamilies Debian and RedHat. Detected osfamily is <Suse>/)
+    end
   end
 
   describe 'when using default values for class on Ubuntu' do
     let :facts do
       {
-        :domain   => 'example.com',
-        :kernel   => 'Linux',
-        :osfamily => 'Debian',
+        :domain    => 'example.com',
+        :kernel    => 'Linux',
+        :osfamily  => 'Debian',
+        :lsbdistid => 'Ubuntu',
       }
     end
 
