@@ -11,15 +11,22 @@ class nisclient(
 
   case $::kernel {
     'Linux': {
-      include rpcbind
-
       $default_service_name = 'ypbind'
-
       case $::osfamily {
-        'RedHat', 'Suse': {
+        'RedHat': {
+          $default_package_name = 'ypbind'
+          case $::lsbmajdistrelease {
+            '6': {
+              include rpcbind
+            }
+          }
+        }
+        'Suse': {
+          include rpcbind
           $default_package_name = 'ypbind'
         }
         'Debian': {
+          include rpcbind
           $default_package_name = 'nis'
         }
         default: {
