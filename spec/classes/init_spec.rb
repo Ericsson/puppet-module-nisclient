@@ -272,6 +272,23 @@ describe 'nisclient' do
         }.to raise_error(Puppet::Error,/nisclient supports osfamilies Debian, RedHat, and Suse on the Linux kernel. Detected osfamily is <Unsupported>./)
       end
     end
+
+    context 'with broadcast mode enabled' do
+        let :facts do
+            { :domain            => 'example.com',
+              :kernel            => 'Linux',
+              :osfamily          => 'RedHat',
+            }
+        end
+
+        let :params do {
+            :broadcast  => true
+        } end
+
+        it {
+            should contain_file('/etc/yp.conf').with_content(/^domain example\.com broadcast$/)
+        }
+    end
   end
 
   describe 'on kernel SunOS' do
