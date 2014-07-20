@@ -33,6 +33,12 @@ NIS server hostname or IP
 
 - *Default*: '127.0.0.1'
 
+broadcast
+---------
+On Linux, enable ypbind broadcast mode. If both `broadcast` and `server` options are specified, broadcast mode will be used.
+
+- *Default*: false
+
 package_ensure
 --------------
 ensure attribute for NIS client package

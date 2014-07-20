@@ -3,11 +3,14 @@
 class nisclient(
   $domainname     = $::domain,
   $server         = '127.0.0.1',
+  $broadcast      = false,
   $package_ensure = 'installed',
   $package_name   = 'USE_DEFAULTS',
   $service_ensure = 'running',
   $service_name   = 'USE_DEFAULTS',
 ) {
+
+  validate_bool($broadcast)
 
   case $::kernel {
     'Linux': {
@@ -79,7 +82,7 @@ class nisclient(
         owner   => 'root',
         group   => 'root',
         mode    => '0644',
-        content => "domain ${domainname} server ${server}\n",
+        content => template("nisclient/yp.conf.erb"),
         require => Package[$my_package_name],
         notify  => Exec['ypdomainname'],
       }

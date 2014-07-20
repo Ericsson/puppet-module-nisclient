@@ -1,0 +1,5 @@
+<% if @broadcast == true -%>
+domain <%= @domainname -%> broadcast
+<% else -%>
+domain <%= @domainname -%> server <%= @server -%>
+<% end %>
