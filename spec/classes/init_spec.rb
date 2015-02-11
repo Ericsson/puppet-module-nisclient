@@ -278,9 +278,10 @@ describe 'nisclient' do
     context 'with defaults params on Solaris' do
       let :facts do
         {
-          :domain   => 'example.com',
-          :kernel   => 'SunOS',
-          :osfamily => 'Solaris',
+          :domain         => 'example.com',
+          :kernel         => 'SunOS',
+          :osfamily       => 'Solaris',
+          :kernelrelease  => '5.10',
         }
       end
 
