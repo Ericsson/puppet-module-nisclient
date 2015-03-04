@@ -31,7 +31,7 @@ describe 'nisclient' do
         })
       }
 
-      it { should contain_file('/etc/yp.conf').with_content(/^domain example.com server 127.0.0.1\n$/) }
+      it { should contain_file('/etc/yp.conf').with_content(/^# This file is being maintained by Puppet.\n# DO NOT EDIT\ndomain example.com server 127.0.0.1\n$/) }
 
       it {
         should contain_exec('ypdomainname').with({
@@ -97,7 +97,7 @@ describe 'nisclient' do
         })
       }
 
-      it { should contain_file('/etc/yp.conf').with_content(/^domain example.com server 127.0.0.1\n$/) }
+      it { should contain_file('/etc/yp.conf').with_content(/^# This file is being maintained by Puppet.\n# DO NOT EDIT\ndomain example.com server 127.0.0.1\n$/) }
 
       it {
         should contain_exec('ypdomainname').with({
@@ -163,7 +163,7 @@ describe 'nisclient' do
         })
       }
 
-      it { should contain_file('/etc/yp.conf').with_content(/^domain example.com server 127.0.0.1\n$/) }
+      it { should contain_file('/etc/yp.conf').with_content(/^# This file is being maintained by Puppet.\n# DO NOT EDIT\ndomain example.com server 127.0.0.1\n$/) }
 
       it {
         should contain_exec('ypdomainname').with({
@@ -225,7 +225,7 @@ describe 'nisclient' do
         })
       }
 
-      it { should contain_file('/etc/yp.conf').with_content(/^domain example.com server 127.0.0.1\n$/) }
+      it { should contain_file('/etc/yp.conf').with_content(/^# This file is being maintained by Puppet.\n# DO NOT EDIT\ndomain example.com server 127.0.0.1\n$/) }
 
       it {
         should contain_exec('ypdomainname').with({
@@ -394,7 +394,7 @@ describe 'nisclient' do
         })
       }
 
-      it { should contain_file('/etc/yp.conf').with_content(/^domain example.com server 192.168.1.1\n$/) }
+      it { should contain_file('/etc/yp.conf').with_content(/^# This file is being maintained by Puppet.\n# DO NOT EDIT\ndomain example.com server 192.168.1.1\n$/) }
     end
 
     context 'with server parameter specified on SunOS' do

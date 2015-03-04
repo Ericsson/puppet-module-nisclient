@@ -79,7 +79,7 @@ class nisclient(
         owner   => 'root',
         group   => 'root',
         mode    => '0644',
-        content => "domain ${domainname} server ${server}\n",
+        content => "# This file is being maintained by Puppet.\n# DO NOT EDIT\ndomain ${domainname} server ${server}\n",
         require => Package[$my_package_name],
         notify  => Exec['ypdomainname'],
       }
