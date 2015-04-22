@@ -34,9 +34,14 @@ class nisclient(
       }
     }
     'SunOS': {
-      $default_package_name = [ 'SUNWnisr',
-                                'SUNWnisu',
-                              ]
+      case $::kernelrelease {
+        '5.10': {
+          $default_package_name = [ 'SUNWnisr', 'SUNWnisu', ]
+        }
+        '5.11': {
+          $default_package_name = [ 'system/network/nis', ]
+        }
+      }
       $default_service_name = 'nis/client'
     }
     default: {
