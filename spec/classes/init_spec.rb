@@ -493,9 +493,10 @@ describe 'nisclient' do
     context 'with server parameter specified on SunOS' do
       let :facts do
         {
-          :domain   => 'example.com',
-          :kernel   => 'SunOS',
-          :osfamily => 'Solaris',
+          :domain        => 'example.com',
+          :kernel        => 'SunOS',
+          :osfamily      => 'Solaris',
+          :kernelrelease => '5.10',
         }
       end
       let :params do
@@ -538,9 +539,10 @@ describe 'nisclient' do
       let(:params) { { :package_name => 'mynispackage' } }
       let :facts do
         {
-          :domain   => 'example.com',
-          :kernel   => 'SunOS',
-          :osfamily => 'Solaris',
+          :domain        => 'example.com',
+          :kernel        => 'SunOS',
+          :osfamily      => 'Solaris',
+          :kernelrelease => '5.10',
         }
       end
 
@@ -574,9 +576,10 @@ describe 'nisclient' do
       let(:params) { { :service_name => 'mynisservice' } }
       let :facts do
         {
-          :domain   => 'example.com',
-          :kernel   => 'SunOS',
-          :osfamily => 'Solaris',
+          :domain        => 'example.com',
+          :kernel        => 'SunOS',
+          :osfamily      => 'Solaris',
+          :kernelrelease => '5.10',
         }
       end
 

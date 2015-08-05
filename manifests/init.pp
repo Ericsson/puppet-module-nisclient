@@ -41,6 +41,9 @@ class nisclient(
         '5.11': {
           $default_package_name = [ 'system/network/nis', ]
         }
+        default: {
+          fail("nisclient supports SunOS 5.10 and 5.11. Detected kernelrelease is <${::kernelrelease}>.")
+        }
       }
       $default_service_name = 'nis/client'
     }

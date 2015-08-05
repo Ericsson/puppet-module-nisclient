@@ -1,0 +1,15 @@
+{
+  "name": "ericsson-nisclient",
+  "version": "1.0.1",
+  "author": "Ericsson",
+  "summary": "Manage the NIS client",
+  "license": "Apache-2.0",
+  "source": "git://github.com/Ericsson/puppet-module-nisclient.git",
+  "project_page": "http://github.com/Ericsson/puppet-module-nisclient",
+  "issues_url": "https://github.com/Ericsson/puppet-module-nisclient/issues",
+  "description": "Manage the NIS client",
+  "dependencies": [
+    {"name":"ghoneycutt/rpcbind","version_requirement":">= 1.1.0"},
+    {"name":"puppetlabs/stdlib","version_requirement":">= 4.6.0"}
+  ]
+}
