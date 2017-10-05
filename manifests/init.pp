@@ -19,22 +19,35 @@ class nisclient(
 
   case $::kernel {
     'Linux': {
-      $default_service_name = 'ypbind'
       case $::osfamily {
         'RedHat': {
           $default_package_name = 'ypbind'
+          $default_service_name = 'ypbind'
 
-          if $::lsbmajdistrelease == '6' {
-            include ::rpcbind
+          case $::lsbmajdistrelease {
+            '6', '7': {
+              include ::rpcbind
+            }
           }
         }
         'Suse': {
           include ::rpcbind
           $default_package_name = 'ypbind'
+          $default_service_name = 'ypbind'
         }
         'Debian': {
           include ::rpcbind
           $default_package_name = 'nis'
+          case $::operatingsystemrelease {
+            '16.04': {
+              $default_service_name = 'nis'
+            }
+            default: {
+              # Legacy behavior until Ubuntu 14.04.
+              # Unknown status on non-Ubuntu Debian, so keeping default as it was.
+              $default_service_name = 'ypbind'
+            }
+          }
         }
         default: {
           fail("nisclient supports osfamilies Debian, RedHat, and Suse on the Linux kernel. Detected osfamily is <${::osfamily}>.")
