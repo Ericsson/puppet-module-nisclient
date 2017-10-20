@@ -15,10 +15,14 @@ This module has been tested to work on the following systems with Puppet v3
 
  * EL 5
  * EL 6
+ * EL 7
  * Suse 11
+ * Suse 12
  * Solaris 10
  * Solaris 11
  * Ubuntu 12.04 LTS
+ * Ubuntu 14.04 LTS
+ * Ubuntu 16.04 LTS
 
 ===
 

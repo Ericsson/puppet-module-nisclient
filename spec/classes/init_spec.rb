@@ -255,6 +255,21 @@ describe 'nisclient' do
           'enable' => 'true',
         })
       }
+
+      context 'with version 16.04' do
+        let :facts do
+          {
+            :operatingsystemrelease => '16.04',
+          }
+        end
+
+        it {
+          should contain_service('nis_service').with({
+            'ensure' => 'running',
+            'name'   => 'nis',
+            'enable' => 'true',
+          })
+      end
     end
 
     context 'with defaults params on unsupported osfamily' do
