@@ -7,7 +7,16 @@
   "source": "git://github.com/Ericsson/puppet-module-nisclient.git",
   "project_page": "http://github.com/Ericsson/puppet-module-nisclient",
   "issues_url": "https://github.com/Ericsson/puppet-module-nisclient/issues",
-  "description": "Manage the NIS client",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.6.0 < 5.0.0"
+    },
+    {
+      "name": "ghoneycutt/rpcbind",
+      "version_requirement": ">= 1.1.0 < 2.0.0"
+    }
+  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
@@ -49,10 +58,13 @@
     }
   ],
   "requirements": [
-    { "name": "puppet", "version_requirement": ">= 3.0.0 < 7.0.0" }
+    {
+      "name": "puppet",
+      "version_requirement": ">= 3.0.0 < 7.0.0"
+    }
   ],
-  "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 4.6.0 < 5.0.0"},
-    {"name":"ghoneycutt/rpcbind","version_requirement":">= 1.1.0 < 2.0.0"}
-  ]
+  "description": "Manage the NIS client",
+  "pdk-version": "2.1.1",
+  "template-url": "pdk-default#2.1.1",
+  "template-ref": "tags/2.1.1-0-g03daa92"
 }
