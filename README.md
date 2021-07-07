@@ -16,13 +16,16 @@ This module aims to support the current and previous major Puppet versions.
  * EL 5
  * EL 6
  * EL 7
+ * EL 8
  * Suse 11
  * Suse 12
+ * Suse 15
  * Solaris 10
  * Solaris 11
  * Ubuntu 12.04 LTS
  * Ubuntu 14.04 LTS
  * Ubuntu 16.04 LTS
+ * Ubuntu 20.04 LTS
 
 ===
 
