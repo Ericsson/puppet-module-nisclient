@@ -9,20 +9,23 @@ Puppet module to manage a NIS client
 
 # Compatability
 
-This module has been tested to work on the following systems with the latest
-Puppet v3, v3 with future parser, v4, v5 and v6. See `.travis.yml` for the
-exact matrix of supported Puppet and ruby versions.
+This module has been tested to work on the following systems with Puppet
+versions 5, 6 and 7 with the Ruby version associated with those releases.
+This module aims to support the current and previous major Puppet versions.
 
  * EL 5
  * EL 6
  * EL 7
+ * EL 8
  * Suse 11
  * Suse 12
+ * Suse 15
  * Solaris 10
  * Solaris 11
  * Ubuntu 12.04 LTS
  * Ubuntu 14.04 LTS
  * Ubuntu 16.04 LTS
+ * Ubuntu 20.04 LTS
 
 ===
 
