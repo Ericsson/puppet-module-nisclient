@@ -4,10 +4,10 @@ describe 'nisclient' do
     context 'with default params on EL 5' do
       let :facts do
         {
-          domain:            'example.com',
-          kernel:            'Linux',
-          osfamily:          'RedHat',
-          lsbmajdistrelease: '5',
+          domain:                    'example.com',
+          kernel:                    'Linux',
+          osfamily:                  'RedHat',
+          operatingsystemmajrelease: '5',
         }
       end
 
@@ -77,10 +77,10 @@ describe 'nisclient' do
     context 'with default params on EL 6' do
       let :facts do
         {
-          domain:            'example.com',
-          kernel:            'Linux',
-          osfamily:          'RedHat',
-          lsbmajdistrelease: '6',
+          domain:                    'example.com',
+          kernel:                    'Linux',
+          osfamily:                  'RedHat',
+          operatingsystemmajrelease: '6',
         }
       end
 
@@ -217,7 +217,7 @@ describe 'nisclient' do
         {
           domain:                 'example.com',
           kernel:                 'Linux',
-          lsbdistid:              'Ubuntu',
+          lsbdistid:              'Ubuntu', # needed for rpcbind module dependency
           osfamily:               'Debian',
           operatingsystemrelease: '18.04',
         }
@@ -283,7 +283,7 @@ describe 'nisclient' do
           {
             domain:                 'example.com',
             kernel:                 'Linux',
-            lsbdistid:              'Ubuntu',
+            lsbdistid:              'Ubuntu', # needed for rpcbind module dependency
             osfamily:               'Debian',
             operatingsystemrelease: '14.04',
           }
@@ -305,7 +305,7 @@ describe 'nisclient' do
           {
             domain:                 'example.com',
             kernel:                 'Linux',
-            lsbdistid:              'Ubuntu',
+            lsbdistid:              'Ubuntu', # needed for rpcbind module dependency
             osfamily:               'Debian',
             operatingsystemrelease: '16.04',
           }
@@ -345,10 +345,10 @@ describe 'nisclient' do
       context "set to #{value}" do
         let :facts do
           {
-            domain:            'example.com',
-            kernel:            'Linux',
-            osfamily:          'RedHat',
-            lsbmajdistrelease: '6',
+            domain:                    'example.com',
+            kernel:                    'Linux',
+            osfamily:                  'RedHat',
+            operatingsystemmajrelease: '6',
           }
         end
 
@@ -366,10 +366,10 @@ describe 'nisclient' do
       context "set to #{value}" do
         let :facts do
           {
-            domain:            'example.com',
-            kernel:            'Linux',
-            osfamily:          'RedHat',
-            lsbmajdistrelease: '6',
+            domain:                    'example.com',
+            kernel:                    'Linux',
+            osfamily:                  'RedHat',
+            operatingsystemmajrelease: '6',
           }
         end
 
@@ -633,10 +633,10 @@ describe 'nisclient' do
     context 'with server parameter specified on Linux' do
       let :facts do
         {
-          domain:            'example.com',
-          kernel:            'Linux',
-          osfamily:          'RedHat',
-          lsbmajdistrelease: '6',
+          domain:                    'example.com',
+          kernel:                    'Linux',
+          osfamily:                  'RedHat',
+          operatingsystemmajrelease: '6',
         }
       end
       let :params do
@@ -692,10 +692,10 @@ describe 'nisclient' do
       let(:params) { { package_ensure: 'absent' } }
       let :facts do
         {
-          domain:            'example.com',
-          kernel:            'Linux',
-          osfamily:          'RedHat',
-          lsbmajdistrelease: '6',
+          domain:                    'example.com',
+          kernel:                    'Linux',
+          osfamily:                  'RedHat',
+          operatingsystemmajrelease: '6',
         }
       end
 
@@ -720,10 +720,10 @@ describe 'nisclient' do
       let(:params) { { service_ensure: 'stopped' } }
       let :facts do
         {
-          domain:            'example.com',
-          kernel:            'Linux',
-          osfamily:          'RedHat',
-          lsbmajdistrelease: '6',
+          domain:                    'example.com',
+          kernel:                    'Linux',
+          osfamily:                  'RedHat',
+          operatingsystemmajrelease: '6',
         }
       end
 
