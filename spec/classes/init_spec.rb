@@ -217,7 +217,7 @@ describe 'nisclient' do
         {
           domain:                 'example.com',
           kernel:                 'Linux',
-          lsbdistid:              'Ubuntu',
+          lsbdistid:              'Ubuntu', # needed for rpcbind module dependency
           osfamily:               'Debian',
           operatingsystemrelease: '18.04',
         }
@@ -283,7 +283,7 @@ describe 'nisclient' do
           {
             domain:                 'example.com',
             kernel:                 'Linux',
-            lsbdistid:              'Ubuntu',
+            lsbdistid:              'Ubuntu', # needed for rpcbind module dependency
             osfamily:               'Debian',
             operatingsystemrelease: '14.04',
           }
@@ -305,7 +305,7 @@ describe 'nisclient' do
           {
             domain:                 'example.com',
             kernel:                 'Linux',
-            lsbdistid:              'Ubuntu',
+            lsbdistid:              'Ubuntu', # needed for rpcbind module dependency
             osfamily:               'Debian',
             operatingsystemrelease: '16.04',
           }
