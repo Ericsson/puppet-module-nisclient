@@ -24,7 +24,7 @@ class nisclient(
           $default_package_name = 'ypbind'
           $default_service_name = 'ypbind'
 
-          case $::lsbmajdistrelease {
+          case $::operatingsystemmajrelease {
             '6', '7': { include ::rpcbind }
             default:  { }
           }
