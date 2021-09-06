@@ -21,6 +21,10 @@ spec/spec_helper.rb:
   hiera_config: 'hiera'
   mock_with: ':rspec'
 
+.pdkignore:
+  paths:
+    - '/rakelib/'
+
 Rakefile:
   default_disabled_lint_checks:
     - '80chars'
