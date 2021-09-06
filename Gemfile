@@ -17,13 +17,34 @@ ruby_version_segments = Gem::Version.new(RUBY_VERSION.dup).segments
 minor_version = ruby_version_segments[0..1].join('.')
 
 group :development do
-  gem "json", '= 2.0.4',                                         require: false if Gem::Requirement.create('~> 2.4.2').satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
-  gem "json", '= 2.1.0',                                         require: false if Gem::Requirement.create(['>= 2.5.0', '< 2.7.0']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
-  gem "json", '= 2.3.0',                                         require: false if Gem::Requirement.create(['>= 2.7.0', '< 2.8.0']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
-  gem "puppet-module-posix-default-r#{minor_version}", '~> 1.0', require: false, platforms: [:ruby]
-  gem "puppet-module-posix-dev-r#{minor_version}", '~> 1.0',     require: false, platforms: [:ruby]
-  gem "puppet-module-win-default-r#{minor_version}", '~> 1.0',   require: false, platforms: [:mswin, :mingw, :x64_mingw]
-  gem "puppet-module-win-dev-r#{minor_version}", '~> 1.0',       require: false, platforms: [:mswin, :mingw, :x64_mingw]
+  gem "json", '= 2.0.4',                                           require: false if Gem::Requirement.create('~> 2.4.2').satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
+  gem "json", '= 2.1.0',                                           require: false if Gem::Requirement.create(['>= 2.5.0', '< 2.7.0']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
+  gem "json", '= 2.3.0',                                           require: false if Gem::Requirement.create(['>= 2.7.0', '< 2.8.0']).satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
+  gem "puppet-module-posix-default-r#{minor_version}", '~> 1.0',   require: false, platforms: [:ruby]
+  gem "puppet-module-posix-dev-r#{minor_version}", '~> 1.0',       require: false, platforms: [:ruby]
+  gem "puppet-module-win-default-r#{minor_version}", '~> 1.0',     require: false, platforms: [:mswin, :mingw, :x64_mingw]
+  gem "puppet-module-win-dev-r#{minor_version}", '~> 1.0',         require: false, platforms: [:mswin, :mingw, :x64_mingw]
+  gem "puppet-lint-absolute_classname-check",                      require: false
+  gem "puppet-lint-alias-check",                                   require: false
+  gem "puppet-lint-anchor-check",                                  require: false
+  gem "puppet-lint-classes_and_types_beginning_with_digits-check", require: false
+  gem "puppet-lint-empty_string-check",                            require: false
+  gem "puppet-lint-empty_trailing_lines",                          require: false
+  gem "puppet-lint-file_ensure-check",                             require: false
+  gem "puppet-lint-leading_zero-check",                            require: false
+  gem "puppet-lint-legacy_facts-check",                            require: false
+  gem "puppet-lint-no_symbolic_file_modes-check",                  require: false
+  gem "puppet-lint-param-docs",                                    require: false
+  gem "puppet-lint-resource_reference_syntax",                     require: false
+  gem "puppet-lint-spaceship_operator_without_tag-check",          require: false
+  gem "puppet-lint-top_scope_facts-check",                         require: false
+  gem "puppet-lint-topscope-variable-check",                       require: false
+  gem "puppet-lint-trailing_comma-check",                          require: false
+  gem "puppet-lint-trailing_newline-check",                        require: false
+  gem "puppet-lint-undef_in_function-check",                       require: false
+  gem "puppet-lint-unquoted_string-check",                         require: false
+  gem "puppet-lint-variable_contains_upcase",                      require: false
+  gem "puppet-lint-version_comparison-check",                      require: false
 end
 group :system_tests do
   gem "puppet-module-posix-system-r#{minor_version}", '~> 1.0', require: false, platforms: [:ruby]

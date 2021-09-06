@@ -38,3 +38,28 @@ Rakefile:
 #    - '  version = (Blacksmith::Modulefile.new).version'
 #    - '  config.exclude_labels = %w{duplicate question invalid wontfix modulesync}'
 #    - 'end'
+
+Gemfile:
+  required:
+    ':development':
+      - gem: puppet-lint-absolute_classname-check
+      - gem: puppet-lint-alias-check
+      - gem: puppet-lint-anchor-check
+      - gem: puppet-lint-classes_and_types_beginning_with_digits-check
+      - gem: puppet-lint-empty_string-check
+      - gem: puppet-lint-empty_trailing_lines
+      - gem: puppet-lint-file_ensure-check
+      - gem: puppet-lint-leading_zero-check
+      - gem: puppet-lint-legacy_facts-check
+      - gem: puppet-lint-no_symbolic_file_modes-check
+      - gem: puppet-lint-param-docs
+      - gem: puppet-lint-resource_reference_syntax
+      - gem: puppet-lint-spaceship_operator_without_tag-check
+      - gem: puppet-lint-top_scope_facts-check
+      - gem: puppet-lint-topscope-variable-check
+      - gem: puppet-lint-trailing_comma-check
+      - gem: puppet-lint-trailing_newline-check
+      - gem: puppet-lint-undef_in_function-check
+      - gem: puppet-lint-unquoted_string-check
+      - gem: puppet-lint-variable_contains_upcase
+      - gem: puppet-lint-version_comparison-check
