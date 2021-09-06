@@ -7,7 +7,7 @@ Puppet module to manage a NIS client
 
 ===
 
-# Compatability
+# Compatibility
 
 This module has been tested to work on the following systems with Puppet
 versions 5, 6 and 7 with the Ruby version associated with those releases.

@@ -4,10 +4,15 @@ describe 'nisclient' do
     context 'with default params on EL 5' do
       let :facts do
         {
-          domain:                    'example.com',
-          kernel:                    'Linux',
-          osfamily:                  'RedHat',
+          domain: 'example.com',
+          kernel: 'Linux',
+          osfamily: 'RedHat',
           operatingsystemmajrelease: '5',
+          os: {
+            'family' => 'RedHat',
+            'name' => 'RedHat',
+            'release': { 'major' => '5' },
+          },
         }
       end
 
@@ -81,6 +86,11 @@ describe 'nisclient' do
           kernel:                    'Linux',
           osfamily:                  'RedHat',
           operatingsystemmajrelease: '6',
+          os: {
+            'family' => 'RedHat',
+            'name' => 'RedHat',
+          'release': { 'major' => '6' },
+          },
         }
       end
 
@@ -153,6 +163,11 @@ describe 'nisclient' do
           domain:   'example.com',
           kernel:   'Linux',
           osfamily: 'Suse',
+          os: {
+            'family' => 'Suse',
+            'name' => 'Suse',
+            'release': { 'major' => '15' },
+          },
         }
       end
 
@@ -220,6 +235,11 @@ describe 'nisclient' do
           lsbdistid:              'Ubuntu', # needed for rpcbind module dependency
           osfamily:               'Debian',
           operatingsystemrelease: '18.04',
+          os: {
+            'family' => 'Debian',
+            'name' => 'Debian',
+            'release': { 'major' => '18.04' },
+          },
         }
       end
 
@@ -286,6 +306,11 @@ describe 'nisclient' do
             lsbdistid:              'Ubuntu', # needed for rpcbind module dependency
             osfamily:               'Debian',
             operatingsystemrelease: '14.04',
+            os: {
+              'family' => 'Debian',
+              'name' => 'Debian',
+              'release': { 'major' => '14.04' },
+            },
           }
         end
 
@@ -308,6 +333,11 @@ describe 'nisclient' do
             lsbdistid:              'Ubuntu', # needed for rpcbind module dependency
             osfamily:               'Debian',
             operatingsystemrelease: '16.04',
+            os: {
+              'family' => 'Debian',
+              'name' => 'Debian',
+              'release': { 'major' => '16.04' },
+            },
           }
         end
 
@@ -329,6 +359,11 @@ describe 'nisclient' do
           domain:   'example.com',
           kernel:   'Linux',
           osfamily: 'Unsupported',
+          os: {
+            'family' => 'unsupported',
+            'name' => 'unsupported',
+            'release': { 'major' => '0' },
+          },
         }
       end
 
@@ -349,6 +384,11 @@ describe 'nisclient' do
             kernel:                    'Linux',
             osfamily:                  'RedHat',
             operatingsystemmajrelease: '6',
+            os: {
+              'family' => 'RedHat',
+              'name' => 'RedHat',
+              'release': { 'major' => '6' },
+            },
           }
         end
 
@@ -370,6 +410,11 @@ describe 'nisclient' do
             kernel:                    'Linux',
             osfamily:                  'RedHat',
             operatingsystemmajrelease: '6',
+            os: {
+              'family' => 'RedHat',
+              'name' => 'RedHat',
+              'release': { 'major' => '6' },
+            },
           }
         end
 
@@ -389,6 +434,11 @@ describe 'nisclient' do
           domain:        'example.com',
           kernel:        'Linux',
           osfamily:      'RedHat',
+          os: {
+            'family' => 'RedHat',
+            'name' => 'RedHat',
+            'release': { 'major' => '6' },
+          },
         }
       end
 
@@ -414,6 +464,11 @@ describe 'nisclient' do
           kernel:        'SunOS',
           osfamily:      'Solaris',
           kernelrelease: '5.10',
+          os: {
+            'family' => 'Solaris',
+            'name' => 'Solaris',
+            'release': { 'major' => '10' },
+          },
         }
       end
 
@@ -518,6 +573,11 @@ describe 'nisclient' do
           kernel:        'SunOS',
           osfamily:      'Solaris',
           kernelrelease: '5.11',
+          os: {
+            'family' => 'Solaris',
+            'name' => 'Solaris',
+            'release': { 'major' => '11' },
+          },
         }
       end
 
@@ -620,6 +680,11 @@ describe 'nisclient' do
           kernel:        'SunOS',
           osfamily:      'Solaris',
           kernelrelease: '5.12',
+          os: {
+            'family' => 'Solaris',
+            'name' => 'Solaris',
+            'release': { 'major' => '12' },
+          },
         }
       end
 
@@ -637,6 +702,11 @@ describe 'nisclient' do
           kernel:                    'Linux',
           osfamily:                  'RedHat',
           operatingsystemmajrelease: '6',
+          os: {
+            'family' => 'RedHat',
+            'name' => 'RedHat',
+            'release': { 'major' => '6' },
+          },
         }
       end
       let :params do
@@ -665,6 +735,11 @@ describe 'nisclient' do
           kernel:        'SunOS',
           osfamily:      'Solaris',
           kernelrelease: '5.10',
+          os: {
+            'family' => 'Solaris',
+            'name' => 'Solaris',
+            'release': { 'major' => '10' },
+          },
         }
       end
       let :params do
@@ -696,6 +771,11 @@ describe 'nisclient' do
           kernel:                    'Linux',
           osfamily:                  'RedHat',
           operatingsystemmajrelease: '6',
+          os: {
+            'family' => 'RedHat',
+            'name' => 'RedHat',
+            'release': { 'major' => '6' },
+          },
         }
       end
 
@@ -710,6 +790,11 @@ describe 'nisclient' do
           kernel:        'SunOS',
           osfamily:      'Solaris',
           kernelrelease: '5.10',
+          os: {
+            'family' => 'Solaris',
+            'name' => 'Solaris',
+            'release': { 'major' => '10' },
+          },
         }
       end
 
@@ -724,6 +809,11 @@ describe 'nisclient' do
           kernel:                    'Linux',
           osfamily:                  'RedHat',
           operatingsystemmajrelease: '6',
+          os: {
+            'family' => 'RedHat',
+            'name' => 'RedHat',
+            'release': { 'major' => '6' },
+          },
         }
       end
 
@@ -746,6 +836,11 @@ describe 'nisclient' do
           kernel:        'SunOS',
           osfamily:      'Solaris',
           kernelrelease: '5.10',
+          os: {
+            'family' => 'Solaris',
+            'name' => 'Solaris',
+            'release': { 'major' => '10' },
+          },
         }
       end
 
