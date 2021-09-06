@@ -40,7 +40,7 @@ describe 'nisclient' do
         is_expected.to contain_exec('ypdomainname').with(
           {
             'command'     => 'ypdomainname example.com',
-            'path'        => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+            'path'        => '/bin:/usr/bin:/sbin:/usr/sbin',
             'refreshonly' => 'true',
             'notify'      => 'Service[nis_service]',
           },
@@ -51,7 +51,7 @@ describe 'nisclient' do
         is_expected.to contain_exec('set_nisdomain').with(
           {
             'command' => 'echo NISDOMAIN=example.com >> /etc/sysconfig/network',
-            'path'    => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+            'path'    => '/bin:/usr/bin:/sbin:/usr/sbin',
             'unless'  => 'grep ^NISDOMAIN /etc/sysconfig/network',
           },
         )
@@ -61,7 +61,7 @@ describe 'nisclient' do
         is_expected.to contain_exec('change_nisdomain').with(
           {
             'command' => 'sed -i \'s/^NISDOMAIN.*/NISDOMAIN=example.com/\' /etc/sysconfig/network',
-            'path'    => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+            'path'    => '/bin:/usr/bin:/sbin:/usr/sbin',
             'unless'  => 'grep ^NISDOMAIN=example.com /etc/sysconfig/network',
             'onlyif'  => 'grep ^NISDOMAIN /etc/sysconfig/network',
           },
@@ -118,7 +118,7 @@ describe 'nisclient' do
         is_expected.to contain_exec('ypdomainname').with(
           {
             'command'     => 'ypdomainname example.com',
-            'path'        => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+            'path'        => '/bin:/usr/bin:/sbin:/usr/sbin',
             'refreshonly' => 'true',
             'notify'      => 'Service[nis_service]',
           },
@@ -129,7 +129,7 @@ describe 'nisclient' do
         is_expected.to contain_exec('set_nisdomain').with(
           {
             'command' => 'echo NISDOMAIN=example.com >> /etc/sysconfig/network',
-            'path'    => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+            'path'    => '/bin:/usr/bin:/sbin:/usr/sbin',
             'unless'  => 'grep ^NISDOMAIN /etc/sysconfig/network',
           },
         )
@@ -139,7 +139,7 @@ describe 'nisclient' do
         is_expected.to contain_exec('change_nisdomain').with(
           {
             'command' => 'sed -i \'s/^NISDOMAIN.*/NISDOMAIN=example.com/\' /etc/sysconfig/network',
-            'path'    => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+            'path'    => '/bin:/usr/bin:/sbin:/usr/sbin',
             'unless'  => 'grep ^NISDOMAIN=example.com /etc/sysconfig/network',
             'onlyif'  => 'grep ^NISDOMAIN /etc/sysconfig/network',
           },
@@ -195,7 +195,7 @@ describe 'nisclient' do
         is_expected.to contain_exec('ypdomainname').with(
           {
             'command'     => 'ypdomainname example.com',
-            'path'        => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+            'path'        => '/bin:/usr/bin:/sbin:/usr/sbin',
             'refreshonly' => 'true',
             'notify'      => 'Service[nis_service]',
           },
@@ -267,7 +267,7 @@ describe 'nisclient' do
         is_expected.to contain_exec('ypdomainname').with(
           {
             'command'     => 'ypdomainname example.com',
-            'path'        => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+            'path'        => '/bin:/usr/bin:/sbin:/usr/sbin',
             'refreshonly' => 'true',
             'notify'      => 'Service[nis_service]',
           },
@@ -360,8 +360,8 @@ describe 'nisclient' do
           kernel:   'Linux',
           osfamily: 'Unsupported',
           os: {
-            'family' => 'unsupported',
-            'name' => 'unsupported',
+            'family' => 'Unsupported',
+            'name' => 'Unsupported',
             'release': { 'major' => '0' },
           },
         }
@@ -376,56 +376,52 @@ describe 'nisclient' do
   end
 
   describe 'with parameter broadcast' do
-    ['true', true].each do |value|
-      context "set to #{value}" do
-        let :facts do
-          {
-            domain:                    'example.com',
-            kernel:                    'Linux',
-            osfamily:                  'RedHat',
-            operatingsystemmajrelease: '6',
-            os: {
-              'family' => 'RedHat',
-              'name' => 'RedHat',
-              'release': { 'major' => '6' },
-            },
-          }
-        end
-
-        let :params do
-          {
-            broadcast: value,
-          }
-        end
-
-        it { is_expected.to contain_file('/etc/yp.conf').with_content(%r{^domain example\.com broadcast$}) }
+    context 'set to true' do
+      let :facts do
+        {
+          domain:                    'example.com',
+          kernel:                    'Linux',
+          osfamily:                  'RedHat',
+          operatingsystemmajrelease: '6',
+          os: {
+            'family' => 'RedHat',
+            'name' => 'RedHat',
+            'release': { 'major' => '6' },
+          },
+        }
       end
+
+      let :params do
+        {
+          broadcast: true,
+        }
+      end
+
+      it { is_expected.to contain_file('/etc/yp.conf').with_content(%r{^domain example\.com broadcast$}) }
     end
 
-    ['false', false].each do |value|
-      context "set to #{value}" do
-        let :facts do
-          {
-            domain:                    'example.com',
-            kernel:                    'Linux',
-            osfamily:                  'RedHat',
-            operatingsystemmajrelease: '6',
-            os: {
-              'family' => 'RedHat',
-              'name' => 'RedHat',
-              'release': { 'major' => '6' },
-            },
-          }
-        end
-
-        let :params do
-          {
-            broadcast: value,
-          }
-        end
-
-        it { is_expected.to contain_file('/etc/yp.conf').with_content(%r{^domain example\.com server 127\.0\.0\.1$}) }
+    context 'set to false' do
+      let :facts do
+        {
+          domain:                    'example.com',
+          kernel:                    'Linux',
+          osfamily:                  'RedHat',
+          operatingsystemmajrelease: '6',
+          os: {
+            'family' => 'RedHat',
+            'name' => 'RedHat',
+            'release': { 'major' => '6' },
+          },
+        }
       end
+
+      let :params do
+        {
+          broadcast: false,
+        }
+      end
+
+      it { is_expected.to contain_file('/etc/yp.conf').with_content(%r{^domain example\.com server 127\.0\.0\.1$}) }
     end
 
     context 'set to an invalid value' do
@@ -546,7 +542,7 @@ describe 'nisclient' do
         is_expected.to contain_exec('domainname').with(
           {
             'command'     => 'domainname example.com',
-            'path'        => [ '/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+            'path'        => '/bin:/usr/bin:/sbin:/usr/sbin',
             'refreshonly' => 'true',
             'notify'      => 'Service[nis_service]',
           },
@@ -653,7 +649,7 @@ describe 'nisclient' do
         is_expected.to contain_exec('domainname').with(
           {
             'command'     => 'domainname example.com',
-            'path'        => [ '/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+            'path'        => '/bin:/usr/bin:/sbin:/usr/sbin',
             'refreshonly' => 'true',
             'notify'      => 'Service[nis_service]',
           },

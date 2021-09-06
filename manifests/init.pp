@@ -1,43 +1,47 @@
-# == Class: nisclient
+# @summary nisclient
+#
+# Manages the NIS client
+#
+# @example Declaring the class
+#   include nisclient
+#
+# @param domainname NIS domain name
+# @param server NIS server hostname or IP
+# @param broadcast On Linux, enable ypbind broadcast mode. If both `broadcast` and `server` options are specified, broadcast mode will be used.
+# @param package_ensure ensure attribute for NIS client package
+# @param package_name String or Array of NIS client package(s). 'USE_DEFAULTS' will use platform specific defaults provided by the module.
+# @param service_ensure ensure attribute for NIS client service
+# @param service_name String name of NIS client service. 'USE_DEFAULTS' will use platform specific defaults provided by the module.
 #
 class nisclient(
-  $domainname     = $::domain,
-  $server         = '127.0.0.1',
-  $broadcast      = false,
-  $package_ensure = 'installed',
-  $package_name   = 'USE_DEFAULTS',
-  $service_ensure = 'running',
-  $service_name   = 'USE_DEFAULTS',
+  String[1] $domainname = $::facts['domain'],
+  Stdlib::Host $server = '127.0.0.1',
+  Boolean $broadcast = false,
+  String[1] $package_ensure = 'installed',
+  String[1] $package_name = 'USE_DEFAULTS',
+  String[1] $service_ensure = 'running',
+  String[1] $service_name = 'USE_DEFAULTS',
 ) {
-
-  if type3x($broadcast) == 'String' {
-    $broadcast_real = str2bool($broadcast)
-  } else {
-    $broadcast_real = $broadcast
-  }
-  validate_bool($broadcast_real)
-
-  case $::kernel {
+  case $::facts['kernel'] {
     'Linux': {
-      case $::osfamily {
+      case $::facts['os']['family'] {
         'RedHat': {
           $default_package_name = 'ypbind'
           $default_service_name = 'ypbind'
 
-          case $::operatingsystemmajrelease {
-            '6', '7': { include ::rpcbind }
-            default:  { }
+          if $::facts['operatingsystemmajrelease'] in ['6', '7'] {
+            include rpcbind
           }
         }
         'Suse': {
-          include ::rpcbind
+          include rpcbind
           $default_package_name = 'ypbind'
           $default_service_name = 'ypbind'
         }
         'Debian': {
-          include ::rpcbind
+          include rpcbind
           $default_package_name = 'nis'
-          case $::operatingsystemrelease {
+          case $::facts['operatingsystemrelease'] {
             '16.04', '18.04': { $default_service_name = 'nis' }
             # Legacy behavior until Ubuntu 14.04.
             # Unknown status on non-Ubuntu Debian, so keeping default as it was.
@@ -45,20 +49,20 @@ class nisclient(
           }
         }
         default: {
-          fail("nisclient supports osfamilies Debian, RedHat, and Suse on the Linux kernel. Detected osfamily is <${::osfamily}>.")
+          fail("nisclient supports osfamilies Debian, RedHat, and Suse on the Linux kernel. Detected osfamily is <${::facts['os']['family']}>.")
         }
       }
     }
     'SunOS': {
-      case $::kernelrelease {
-        '5.10':  { $default_package_name = [ 'SUNWnisr', 'SUNWnisu', ] }
-        '5.11':  { $default_package_name = [ 'system/network/nis', ] }
-        default: { fail("nisclient supports SunOS 5.10 and 5.11. Detected kernelrelease is <${::kernelrelease}>.") }
+      case $::facts['kernelrelease'] {
+        '5.10':  { $default_package_name = ['SUNWnisr', 'SUNWnisu'] }
+        '5.11':  { $default_package_name = ['system/network/nis'] }
+        default: { fail("nisclient supports SunOS 5.10 and 5.11. Detected kernelrelease is <${::facts['kernelrelease']}>.") }
       }
       $default_service_name = 'nis/client'
     }
     default: {
-      fail("nisclient is only supported on Linux and Solaris kernels. Detected kernel is <${::kernel}>")
+      fail("nisclient is only supported on Linux and Solaris kernels. Detected kernel is <${::facts['kernel']}>")
     }
   }
 
@@ -90,7 +94,7 @@ class nisclient(
     enable => $service_enable,
   }
 
-  case $::kernel {
+  case $::facts['kernel'] {
     'Linux': {
       file { '/etc/yp.conf':
         ensure  => 'file',
@@ -104,38 +108,26 @@ class nisclient(
 
       exec { 'ypdomainname':
         command     => "ypdomainname ${domainname}",
-        path        => [ '/bin',
-                          '/usr/bin',
-                          '/sbin',
-                          '/usr/sbin',
-                        ],
+        path        => '/bin:/usr/bin:/sbin:/usr/sbin',
         refreshonly => true,
         notify      => Service['nis_service'],
       }
 
-      if $::osfamily == 'RedHat' {
+      if $::facts['os']['family'] == 'RedHat' {
         exec { 'set_nisdomain':
           command => "echo NISDOMAIN=${domainname} >> /etc/sysconfig/network",
-          path    => [ '/bin',
-                        '/usr/bin',
-                        '/sbin',
-                        '/usr/sbin',
-                      ],
+          path    => '/bin:/usr/bin:/sbin:/usr/sbin',
           unless  => 'grep ^NISDOMAIN /etc/sysconfig/network',
         }
 
         exec { 'change_nisdomain':
           command => "sed -i 's/^NISDOMAIN.*/NISDOMAIN=${domainname}/' /etc/sysconfig/network",
-          path    => [ '/bin',
-                        '/usr/bin',
-                        '/sbin',
-                        '/usr/sbin',
-                      ],
+          path    => '/bin:/usr/bin:/sbin:/usr/sbin',
           unless  => "grep ^NISDOMAIN=${domainname} /etc/sysconfig/network",
           onlyif  => 'grep ^NISDOMAIN /etc/sysconfig/network',
         }
       }
-      elsif $::osfamily =~ /Suse|Debian/ {
+      elsif $::facts['os']['family'] in ['Suse', 'Debian'] {
         file { '/etc/defaultdomain':
           ensure  => file,
           owner   => 'root',
@@ -146,9 +138,21 @@ class nisclient(
       }
     }
     'SunOS': {
-      file { ['/var/yp',
-              '/var/yp/binding',
-              "/var/yp/binding/${domainname}"]:
+      file { '/var/yp':
+        ensure => directory,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0755',
+      }
+
+      file { '/var/yp/binding':
+        ensure => directory,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0755',
+      }
+
+      file { "/var/yp/binding/${domainname}":
         ensure => directory,
         owner  => 'root',
         group  => 'root',
@@ -167,11 +171,7 @@ class nisclient(
 
       exec { 'domainname':
         command     => "domainname ${domainname}",
-        path        => [ '/bin',
-                          '/usr/bin',
-                          '/sbin',
-                          '/usr/sbin',
-                        ],
+        path        => '/bin:/usr/bin:/sbin:/usr/sbin',
         refreshonly => true,
         notify      => Service['nis_service'],
       }
@@ -183,10 +183,9 @@ class nisclient(
         mode    => '0644',
         content => "${domainname}\n",
       }
-
     }
     default: {
-      fail("nisclient is only supported on Linux and Solaris kernels. Detected kernel is <${::kernel}>")
+      fail("nisclient is only supported on Linux and Solaris kernels. Detected kernel is <${::facts['kernel']}>")
     }
   }
 }
