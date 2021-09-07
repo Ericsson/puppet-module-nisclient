@@ -253,7 +253,6 @@ describe 'nisclient' do
               |# This file is being maintained by Puppet.
               |# DO NOT EDIT
               |domain example.com broadcast
-              |
             END
 
             it { is_expected.to contain_file('/etc/yp.conf').with_content(content_yp_conf_broadcast) }
