@@ -1,7 +1,7 @@
 # This file is being maintained by Puppet.
 # DO NOT EDIT
 <% if @broadcast_real == true -%>
-domain <%= @domainname -%> broadcast
+domain <%= @domainname %> broadcast
 <% else -%>
-domain <%= @domainname -%> server <%= @server -%>
-<% end %>
+domain <%= @domainname %> server <%= @server %>
+<% end -%>
