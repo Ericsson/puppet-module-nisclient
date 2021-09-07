@@ -1,4 +1,17 @@
-# == Class: nisclient
+# @summary nisclient
+#
+# Manages the NIS client
+#
+# @example Declaring the class
+#   include nisclient
+#
+# @param domainname NIS domain name
+# @param server NIS server hostname or IP
+# @param broadcast On Linux, enable ypbind broadcast mode. If both `broadcast` and `server` options are specified, broadcast mode will be used.
+# @param package_ensure ensure attribute for NIS client package
+# @param package_name String or Array of NIS client package(s). 'USE_DEFAULTS' will use platform specific defaults provided by the module.
+# @param service_ensure ensure attribute for NIS client service
+# @param service_name String name of NIS client service. 'USE_DEFAULTS' will use platform specific defaults provided by the module.
 #
 class nisclient(
   $domainname     = $::domain,
