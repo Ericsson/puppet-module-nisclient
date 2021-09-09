@@ -125,7 +125,7 @@ describe 'nisclient' do
             is_expected.to contain_exec('domainname').with(
               {
                 'command'     => 'domainname example.com',
-                'path'        => [ '/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+                'path'        => '/bin:/usr/bin:/sbin:/usr/sbin',
                 'refreshonly' => 'true',
                 'notify'      => 'Service[nis_service]',
               },
@@ -152,7 +152,7 @@ describe 'nisclient' do
             is_expected.to contain_exec('ypdomainname').with(
               {
                 'command'     => 'ypdomainname example.com',
-                'path'        => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+                'path'        => '/bin:/usr/bin:/sbin:/usr/sbin',
                 'refreshonly' => 'true',
                 'notify'      => 'Service[nis_service]',
               },
@@ -164,7 +164,7 @@ describe 'nisclient' do
               is_expected.to contain_exec('set_nisdomain').with(
                 {
                   'command' => 'echo NISDOMAIN=example.com >> /etc/sysconfig/network',
-                  'path'    => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+                  'path'    => '/bin:/usr/bin:/sbin:/usr/sbin',
                   'unless'  => 'grep ^NISDOMAIN /etc/sysconfig/network',
                 },
               )
@@ -173,7 +173,7 @@ describe 'nisclient' do
               is_expected.to contain_exec('change_nisdomain').with(
                 {
                   'command' => 'sed -i \'s/^NISDOMAIN.*/NISDOMAIN=example.com/\' /etc/sysconfig/network',
-                  'path'    => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
+                  'path'    => '/bin:/usr/bin:/sbin:/usr/sbin',
                   'unless'  => 'grep ^NISDOMAIN=example.com /etc/sysconfig/network',
                   'onlyif'  => 'grep ^NISDOMAIN /etc/sysconfig/network',
                 },

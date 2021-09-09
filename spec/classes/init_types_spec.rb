@@ -28,12 +28,18 @@ describe 'nisclient' do
             invalid: ['string', ['array'], { 'ha' => 'sh' }, 3, 2.42, nil],
             message: '(is not a boolean|Unknown type of boolean given)',
           },
+          'string' => {
+            name:    ['domainname', 'package_ensure', 'server', 'service_name'],
+            valid:   ['string'],
+            invalid: [['array'], { 'ha' => 'sh' }, 3, 2.42, true, false],
+            message: 'is not a string',
+          },
           # FIXME: implemented variable validation
-          # 'string' => {
-          #   name:    ['domainname', 'package_ensure', 'server', 'service_ensure', 'service_name'],
-          #   valid:   ['string'],
-          #   invalid: [['array'], { 'ha' => 'sh' }, 3, 2.42, true, false],
-          #   message: 'is not a string',
+          # 'service_ensure' => {
+          #   name:    ['service_ensure'],
+          #   valid:   ['running', 'stopped'],
+          #   invalid: ['string', ['array'], { 'ha' => 'sh' }, 3, 2.42, true, false],
+          #   message: ' may be either running or stopped',
           # },
         }
         validations.sort.each do |type, var|
