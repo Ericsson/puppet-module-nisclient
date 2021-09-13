@@ -1,9 +1,9 @@
 fixtures:
   repositories:
-    'rpcbind':
+    rpcbind:
       repo: 'https://github.com/ghoneycutt/puppet-module-rpcbind.git'
-      ref:  'v1.1.0'
-    'stdlib':
+      ref:  'v3.0.0'
+    stdlib:
       repo: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
       ref:  '5.2.0'
   symlinks:
