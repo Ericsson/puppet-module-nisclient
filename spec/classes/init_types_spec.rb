@@ -22,25 +22,36 @@ describe 'nisclient' do
           #   invalid: [{ 'ha' => 'sh' }, 3, 2.42, true, false],
           #   message: 'is not an array nor a string',
           # },
-          'boolean' => {
+          'Boolean' => {
             name:    ['broadcast'],
-            valid:   [true, false, 'true', 'false'],
-            invalid: ['string', ['array'], { 'ha' => 'sh' }, 3, 2.42, nil],
-            message: '(is not a boolean|Unknown type of boolean given)',
+            valid:   [true, false],
+            invalid: ['true', 'false', 'string', ['array'], { 'ha' => 'sh' }, 3, 2.42, nil],
+            message: 'expects a Boolean value',
           },
-          'string' => {
-            name:    ['domainname', 'package_ensure', 'server', 'service_name'],
+          'String' => {
+            name:    ['package_ensure', 'service_name'],
             valid:   ['string'],
             invalid: [['array'], { 'ha' => 'sh' }, 3, 2.42, true, false],
-            message: 'is not a string',
+            message: 'expects a String value',
           },
-          # FIXME: implemented variable validation
-          # 'service_ensure' => {
-          #   name:    ['service_ensure'],
-          #   valid:   ['running', 'stopped'],
-          #   invalid: ['string', ['array'], { 'ha' => 'sh' }, 3, 2.42, true, false],
-          #   message: ' may be either running or stopped',
-          # },
+          'Stdlib::Fqdn' => {
+            name:    ['domainname'],
+            valid:   ['string', '127.0.0.1', 'test.ing'],
+            invalid: [['array'], { 'ha' => 'sh' }, 3, 2.42, true, false],
+            message: 'Error while evaluating a Resource Statement',
+          },
+          'Stdlib::Host' => {
+            name:    ['server'],
+            valid:   ['localhost', '127.0.0.1', 'www.test.ing'],
+            invalid: [['array'], { 'ha' => 'sh' }, 3, 2.42, true, false],
+            message: 'Error while evaluating a Resource Statement',
+          },
+           'service_ensure' => {
+             name:    ['service_ensure'],
+             valid:   ['running', 'stopped'],
+             invalid: [['array'], { 'ha' => 'sh' }, 3, 2.42, true, false],
+             message: '(Valid values are stopped, running|expects a String value)',
+           },
         }
         validations.sort.each do |type, var|
           var[:name].each do |var_name|

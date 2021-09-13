@@ -14,13 +14,13 @@
 # @param service_name String name of NIS client service. 'USE_DEFAULTS' will use platform specific defaults provided by the module.
 #
 class nisclient(
-  $domainname     = $::domain,
-  $server         = '127.0.0.1',
-  $broadcast      = false,
-  $package_ensure = 'installed',
-  $package_name   = 'USE_DEFAULTS',
-  $service_ensure = 'running',
-  $service_name   = 'USE_DEFAULTS',
+  Stdlib::Fqdn $domainname = $::facts['domain'],
+  Stdlib::Host $server = '127.0.0.1',
+  Boolean $broadcast = false,
+  String[1] $package_ensure = 'installed',
+  Variant[String[1],Array] $package_name = 'USE_DEFAULTS',
+  String[1] $service_ensure = 'running',
+  String[1] $service_name = 'USE_DEFAULTS',
 ) {
 
   # variable preparations
@@ -60,19 +60,6 @@ class nisclient(
   } else {
     $package_name_real = $package_name
   }
-
-  # variable validations
-  if type3x($broadcast) == 'String' {
-    $broadcast_real = str2bool($broadcast)
-  } else {
-    $broadcast_real = $broadcast
-  }
-  validate_bool($broadcast_real)
-
-  if is_string($domainname)     == false { fail('nisclient::domainname is not a string.') }
-  if is_string($package_ensure) == false { fail('nisclient::package_ensure is not a string.') }
-  if is_string($server)         == false { fail('nisclient::server is not a string.') }
-  if is_string($service_name)   == false { fail('nisclient::service_name is not a string.') }
 
   # functionality
   if "${::facts['os']['family']}${::facts['operatingsystemrelease']}" =~ /^(Debian|RedHat(6|7)|Suse)/ {
