@@ -28,9 +28,11 @@ class nisclient(
     'RedHat', 'Suse': {
       $default_package_name = 'ypbind'
       $default_service_name = 'ypbind'
+      $package_before = 'File[/etc/yp.conf]'
     }
     'Debian': {
       $default_package_name = 'nis'
+      $package_before = 'File[/etc/yp.conf]'
       case $::facts['operatingsystemmajrelease'] {
         '16.04', '18.04': { $default_service_name = 'nis' }
         default: { $default_service_name = 'ypbind' }
@@ -38,6 +40,7 @@ class nisclient(
     }
     'Solaris': {
       $default_service_name = 'nis/client'
+      $package_before = undef
       case $::facts['kernelrelease'] {
         '5.10':  { $default_package_name = [ 'SUNWnisr', 'SUNWnisu' ] }
         '5.11':  { $default_package_name = [ 'system/network/nis' ] }
@@ -68,6 +71,7 @@ class nisclient(
 
   package { $package_name_real:
     ensure => $package_ensure,
+    before => $package_before,
   }
 
   if $service_ensure == 'stopped' {
@@ -135,7 +139,6 @@ class nisclient(
         group   => 'root',
         mode    => '0644',
         content => template('nisclient/yp.conf.erb'),
-        require => Package[$package_name_real],
         notify  => Exec['ypdomainname'],
       }
 
