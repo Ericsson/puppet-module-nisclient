@@ -18,55 +18,27 @@ class nisclient(
   Stdlib::Host $server = '127.0.0.1',
   Boolean $broadcast = false,
   String[1] $package_ensure = 'installed',
-  Variant[Array,String[1]] $package_name = 'USE_DEFAULTS',
+  Variant[Array,String[1]] $package_name = undef,
   String[1] $service_ensure = 'running',
-  String[1] $service_name = 'USE_DEFAULTS',
+  String[1] $service_name = undef,
 ) {
 
   # variable preparations
   case $::facts['os']['family'] {
-    'RedHat', 'Suse': {
-      $default_package_name = [ 'ypbind' ]
-      $default_service_name = 'ypbind'
+    'Debian', 'RedHat', 'Suse': {
       $package_before = 'File[/etc/yp.conf]'
-    }
-    'Debian': {
-      $default_package_name = [ 'nis' ]
-      $package_before = 'File[/etc/yp.conf]'
-      case $::facts['operatingsystemmajrelease'] {
-        '16.04', '18.04': { $default_service_name = 'nis' }
-        default: { $default_service_name = 'ypbind' }
-      }
     }
     'Solaris': {
-      $default_service_name = 'nis/client'
       $package_before = undef
-      case $::facts['kernelrelease'] {
-        '5.10':  { $default_package_name = [ 'SUNWnisr', 'SUNWnisu' ] }
-        '5.11':  { $default_package_name = [ 'system/network/nis' ] }
-        default: { fail("nisclient supports Solaris SunOS 5.10 and 5.11. Detected kernelrelease is <${::facts['kernelrelease']}>.") }
-      }
     }
     default: {
-      fail("nisclient is only supported on Debian, RedHat, Solaris, and Suse osfamilies. Detected osfamily is <${::facts['os']['family']}>")
+      fail("nisclient is only supported on RedHat, Solaris, Suse, and Ubuntu osfamilies. Detected osfamily is <${::facts['os']['family']}>")
     }
   }
 
-  if $service_name == 'USE_DEFAULTS' {
-    $service_name_real = $default_service_name
-  } else {
-    $service_name_real = $service_name
-  }
-
-  if $package_name == 'USE_DEFAULTS' {
-    $package_name_real = $default_package_name
-  } else {
-    $package_name_real = $package_name
-  }
-
-  case type_of($package_name_real) {
-    'Array': { $package_name_array = $package_name_real }
-    default: { $package_name_array = any2array($package_name_real) }
+  case type_of($package_name) {
+    'Array': { $package_name_array = $package_name }
+    default: { $package_name_array = any2array($package_name) }
   }
 
   # functionality
@@ -87,7 +59,7 @@ class nisclient(
 
   service { 'nis_service':
     ensure => $service_ensure,
-    name   => $service_name_real,
+    name   => $service_name,
     enable => $service_enable,
   }
 

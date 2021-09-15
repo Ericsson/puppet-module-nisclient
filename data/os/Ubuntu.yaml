@@ -1,0 +1,5 @@
+---
+nisclient::package_name:
+  - nis
+
+nisclient::service_name: ypbind
