@@ -68,9 +68,9 @@ Default value: `'installed'`
 
 ##### <a name="package_name"></a>`package_name`
 
-Data type: `Variant[String[1],Array]`
+Data type: `Variant[Array,String[1]]`
 
-String or Array of NIS client package(s). 'USE_DEFAULTS' will use platform specific defaults provided by the module.
+Array of NIS client package(s). 'USE_DEFAULTS' will use platform specific defaults provided by the module. Passing a string is deprecated and only available for easier upgrading.
 
 Default value: `'USE_DEFAULTS'`
 

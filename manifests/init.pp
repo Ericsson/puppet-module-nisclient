@@ -9,7 +9,7 @@
 # @param server NIS server hostname or IP
 # @param broadcast On Linux, enable ypbind broadcast mode. If both `broadcast` and `server` options are specified, broadcast mode will be used.
 # @param package_ensure ensure attribute for NIS client package
-# @param package_name String or Array of NIS client package(s). 'USE_DEFAULTS' will use platform specific defaults provided by the module.
+# @param package_name Array of NIS client package(s). 'USE_DEFAULTS' will use platform specific defaults provided by the module. Passing a string is deprecated and only available for easier upgrading.
 # @param service_ensure ensure attribute for NIS client service
 # @param service_name String name of NIS client service. 'USE_DEFAULTS' will use platform specific defaults provided by the module.
 #
@@ -18,7 +18,7 @@ class nisclient(
   Stdlib::Host $server = '127.0.0.1',
   Boolean $broadcast = false,
   String[1] $package_ensure = 'installed',
-  Variant[String[1],Array] $package_name = 'USE_DEFAULTS',
+  Variant[Array,String[1]] $package_name = 'USE_DEFAULTS',
   String[1] $service_ensure = 'running',
   String[1] $service_name = 'USE_DEFAULTS',
 ) {
@@ -26,12 +26,12 @@ class nisclient(
   # variable preparations
   case $::facts['os']['family'] {
     'RedHat', 'Suse': {
-      $default_package_name = 'ypbind'
+      $default_package_name = [ 'ypbind' ]
       $default_service_name = 'ypbind'
       $package_before = 'File[/etc/yp.conf]'
     }
     'Debian': {
-      $default_package_name = 'nis'
+      $default_package_name = [ 'nis' ]
       $package_before = 'File[/etc/yp.conf]'
       case $::facts['operatingsystemmajrelease'] {
         '16.04', '18.04': { $default_service_name = 'nis' }
@@ -64,12 +64,17 @@ class nisclient(
     $package_name_real = $package_name
   }
 
+  case type_of($package_name_real) {
+    'Array': { $package_name_array = $package_name_real }
+    default: { $package_name_array = any2array($package_name_real) }
+  }
+
   # functionality
   if "${::facts['os']['family']}${::facts['operatingsystemrelease']}" =~ /^(Debian|RedHat(6|7)|Suse)/ {
     include rpcbind
   }
 
-  package { $package_name_real:
+  package { $package_name_array:
     ensure => $package_ensure,
     before => $package_before,
   }
