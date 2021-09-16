@@ -1,0 +1,4 @@
+---
+nisclient::package_name:
+  - SUNWnisr
+  - SUNWnisu

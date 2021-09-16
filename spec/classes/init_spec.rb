@@ -22,16 +22,18 @@ describe 'nisclient' do
         # OS specific defaults
         case os_facts[:osfamily]
         when 'RedHat', 'Suse'
-          default_packages = 'ypbind'
+          default_packages = [ 'ypbind' ]
           default_service  = 'ypbind'
+          package_before   = 'File[/etc/yp.conf]'
         when 'Debian'
-          default_packages = 'nis'
+          default_packages = [ 'nis' ]
           default_service = case os_facts[:operatingsystemmajrelease]
                             when '16.04', '18.04'
                               'nis'
                             else
                               'ypbind'
                             end
+          package_before = 'File[/etc/yp.conf]'
         when 'Solaris'
           default_packages = case os_facts[:kernelrelease]
                              when '5.10'
@@ -40,6 +42,7 @@ describe 'nisclient' do
                                [ 'system/network/nis' ]
                              end
 
+          package_before = nil
           default_service = 'nis/client'
         end
 
@@ -51,12 +54,15 @@ describe 'nisclient' do
           it { is_expected.not_to contain_class('rpcbind') }
         end
 
-        if default_packages.class == String
-          it { is_expected.to contain_package(default_packages).with_ensure('installed') }
-        else
-          default_packages.each do |package|
-            it { is_expected.to contain_package(package).with_ensure('installed') }
-          end
+        default_packages.each do |package|
+          it {
+            is_expected.to contain_package(package).with(
+              {
+                'ensure' => 'installed',
+                'before' => package_before,
+              },
+            )
+          }
         end
 
         it {
@@ -141,7 +147,6 @@ describe 'nisclient' do
                 'owner'   => 'root',
                 'group'   => 'root',
                 'mode'    => '0644',
-                'require' => "Package[#{default_packages}]",
                 'notify'  => 'Exec[ypdomainname]',
                 'content' => content_yp_conf,
               },
@@ -262,25 +267,16 @@ describe 'nisclient' do
         context 'with package_ensure parameter set to valid value absent' do
           let(:params) { { package_ensure: 'absent' } }
 
-          if default_packages.class == String
-            it { is_expected.to contain_package(default_packages).with_ensure('absent') }
-          else
-            default_packages.each do |package|
-              it { is_expected.to contain_package(package).with_ensure('absent') }
-            end
+          default_packages.each do |package|
+            it { is_expected.to contain_package(package).with_ensure('absent') }
           end
         end
 
-        context 'with package_name parameter set to valid value [test ing]' do
-          let(:params) { { package_name: [ 'test', 'ing' ] } }
+        # package_name should be an array, passing a string is deprecated and only available for easier upgrading
+        context 'with package_name parameter set to valid value testing' do
+          let(:params) { { package_name: 'testing' } }
 
-          [ 'test', 'ing' ].each do |package|
-            it { is_expected.to contain_package(package).with_ensure('installed') }
-          end
-
-          if os_facts[:osfamily] != 'Solaris' # Linuxes
-            it { is_expected.to contain_file('/etc/yp.conf').with_require(['Package[test]', 'Package[ing]']) }
-          end
+          it { is_expected.to contain_package('testing').with_ensure('installed') }
         end
 
         context 'with service_ensure parameter set to valid value stopped' do

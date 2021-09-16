@@ -9,80 +9,46 @@
 # @param server NIS server hostname or IP
 # @param broadcast On Linux, enable ypbind broadcast mode. If both `broadcast` and `server` options are specified, broadcast mode will be used.
 # @param package_ensure ensure attribute for NIS client package
-# @param package_name String or Array of NIS client package(s). 'USE_DEFAULTS' will use platform specific defaults provided by the module.
+# @param package_name Array of NIS client package(s). 'USE_DEFAULTS' will use platform specific defaults provided by the module. Passing a string is deprecated and only available for easier upgrading.
 # @param service_ensure ensure attribute for NIS client service
 # @param service_name String name of NIS client service. 'USE_DEFAULTS' will use platform specific defaults provided by the module.
 #
 class nisclient(
-  $domainname     = $::domain,
-  $server         = '127.0.0.1',
-  $broadcast      = false,
-  $package_ensure = 'installed',
-  $package_name   = 'USE_DEFAULTS',
-  $service_ensure = 'running',
-  $service_name   = 'USE_DEFAULTS',
+  Stdlib::Fqdn $domainname = $::facts['domain'],
+  Stdlib::Host $server = '127.0.0.1',
+  Boolean $broadcast = false,
+  String[1] $package_ensure = 'installed',
+  Variant[Array,String[1]] $package_name = undef,
+  String[1] $service_ensure = 'running',
+  String[1] $service_name = undef,
 ) {
 
   # variable preparations
-  case $::osfamily {
-    'RedHat', 'Suse': {
-      $default_package_name = 'ypbind'
-      $default_service_name = 'ypbind'
-    }
-    'Debian': {
-      $default_package_name = 'nis'
-      case $::operatingsystemrelease {
-        '16.04', '18.04': { $default_service_name = 'nis' }
-        # Legacy behavior until Ubuntu 14.04.
-        # Unknown status on non-Ubuntu Debian, so keeping default as it was.
-        default: { $default_service_name = 'ypbind' }
-      }
+  case $::facts['os']['family'] {
+    'Debian', 'RedHat', 'Suse': {
+      $package_before = 'File[/etc/yp.conf]'
     }
     'Solaris': {
-      $default_service_name = 'nis/client'
-      case $::kernelrelease {
-        '5.10':  { $default_package_name = [ 'SUNWnisr', 'SUNWnisu' ] }
-        '5.11':  { $default_package_name = [ 'system/network/nis' ] }
-        default: { fail("nisclient supports Solaris SunOS 5.10 and 5.11. Detected kernelrelease is <${::kernelrelease}>.") }
-      }
+      $package_before = undef
     }
     default: {
-      fail("nisclient is only supported on Debian, RedHat, Solaris, and Suse osfamilies. Detected osfamily is <${::osfamily}>")
+      fail("nisclient is only supported on RedHat, Solaris, Suse, and Ubuntu osfamilies. Detected osfamily is <${::facts['os']['family']}>")
     }
   }
 
-  if $service_name == 'USE_DEFAULTS' {
-    $service_name_real = $default_service_name
-  } else {
-    $service_name_real = $service_name
+  case type_of($package_name) {
+    'Array': { $package_name_array = $package_name }
+    default: { $package_name_array = any2array($package_name) }
   }
-
-  if $package_name == 'USE_DEFAULTS' {
-    $package_name_real = $default_package_name
-  } else {
-    $package_name_real = $package_name
-  }
-
-  # variable validations
-  if type3x($broadcast) == 'String' {
-    $broadcast_real = str2bool($broadcast)
-  } else {
-    $broadcast_real = $broadcast
-  }
-  validate_bool($broadcast_real)
-
-  if is_string($domainname)     == false { fail('nisclient::domainname is not a string.') }
-  if is_string($package_ensure) == false { fail('nisclient::package_ensure is not a string.') }
-  if is_string($server)         == false { fail('nisclient::server is not a string.') }
-  if is_string($service_name)   == false { fail('nisclient::service_name is not a string.') }
 
   # functionality
-  if "${::osfamily}${::operatingsystemrelease}" =~ /^(Debian|RedHat(6|7)|Suse)/ {
+  if "${::facts['os']['family']}${::facts['operatingsystemrelease']}" =~ /^(Debian|RedHat(6|7)|Suse)/ {
     include rpcbind
   }
 
-  package { $package_name_real:
+  package { $package_name_array:
     ensure => $package_ensure,
+    before => $package_before,
   }
 
   if $service_ensure == 'stopped' {
@@ -93,11 +59,11 @@ class nisclient(
 
   service { 'nis_service':
     ensure => $service_ensure,
-    name   => $service_name_real,
+    name   => $service_name,
     enable => $service_enable,
   }
 
-  case $::osfamily {
+  case $::facts['os']['family'] {
     'Solaris': {
       file { '/var/yp':
         ensure => directory,
@@ -150,7 +116,6 @@ class nisclient(
         group   => 'root',
         mode    => '0644',
         content => template('nisclient/yp.conf.erb'),
-        require => Package[$package_name_real],
         notify  => Exec['ypdomainname'],
       }
 
@@ -161,7 +126,7 @@ class nisclient(
         notify      => Service['nis_service'],
       }
 
-      if $::osfamily == 'RedHat' {
+      if $::facts['os']['family'] == 'RedHat' {
         exec { 'set_nisdomain':
           command => "echo NISDOMAIN=${domainname} >> /etc/sysconfig/network",
           path    => '/bin:/usr/bin:/sbin:/usr/sbin',
@@ -178,7 +143,7 @@ class nisclient(
     }
   }
 
-  case $::osfamily {
+  case $::facts['os']['family'] {
     'Debian', 'Solaris', 'Suse': {
       file { '/etc/defaultdomain':
         ensure  => file,

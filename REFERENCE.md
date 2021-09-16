@@ -36,15 +36,15 @@ The following parameters are available in the `nisclient` class:
 
 ##### <a name="domainname"></a>`domainname`
 
-Data type: `Any`
+Data type: `Stdlib::Fqdn`
 
 NIS domain name
 
-Default value: `$::domain`
+Default value: `$::facts['domain']`
 
 ##### <a name="server"></a>`server`
 
-Data type: `Any`
+Data type: `Stdlib::Host`
 
 NIS server hostname or IP
 
@@ -52,7 +52,7 @@ Default value: `'127.0.0.1'`
 
 ##### <a name="broadcast"></a>`broadcast`
 
-Data type: `Any`
+Data type: `Boolean`
 
 On Linux, enable ypbind broadcast mode. If both `broadcast` and `server` options are specified, broadcast mode will be used.
 
@@ -60,7 +60,7 @@ Default value: ``false``
 
 ##### <a name="package_ensure"></a>`package_ensure`
 
-Data type: `Any`
+Data type: `String[1]`
 
 ensure attribute for NIS client package
 
@@ -68,15 +68,15 @@ Default value: `'installed'`
 
 ##### <a name="package_name"></a>`package_name`
 
-Data type: `Any`
+Data type: `Variant[Array,String[1]]`
 
-String or Array of NIS client package(s). 'USE_DEFAULTS' will use platform specific defaults provided by the module.
+Array of NIS client package(s). 'USE_DEFAULTS' will use platform specific defaults provided by the module. Passing a string is deprecated and only available for easier upgrading.
 
 Default value: `'USE_DEFAULTS'`
 
 ##### <a name="service_ensure"></a>`service_ensure`
 
-Data type: `Any`
+Data type: `String[1]`
 
 ensure attribute for NIS client service
 
@@ -84,7 +84,7 @@ Default value: `'running'`
 
 ##### <a name="service_name"></a>`service_name`
 
-Data type: `Any`
+Data type: `String[1]`
 
 String name of NIS client service. 'USE_DEFAULTS' will use platform specific defaults provided by the module.
 
