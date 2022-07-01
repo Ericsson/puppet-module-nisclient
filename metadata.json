@@ -1,6 +1,6 @@
 {
   "name": "ericsson-nisclient",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Ericsson",
   "summary": "Manage the NIS client",
   "license": "Apache-2.0",
