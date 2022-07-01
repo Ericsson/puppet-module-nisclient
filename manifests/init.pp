@@ -13,7 +13,7 @@
 # @param service_ensure ensure attribute for NIS client service
 # @param service_name String name of NIS client service. 'USE_DEFAULTS' will use platform specific defaults provided by the module.
 #
-class nisclient(
+class nisclient (
   Stdlib::Fqdn $domainname = $::facts['domain'],
   Stdlib::Host $server = '127.0.0.1',
   Boolean $broadcast = false,
@@ -22,7 +22,6 @@ class nisclient(
   String[1] $service_ensure = 'running',
   String[1] $service_name = undef,
 ) {
-
   # variable preparations
   case $::facts['os']['family'] {
     'Debian', 'RedHat', 'Suse': {
