@@ -14,6 +14,7 @@ This module aims to support the current and previous major Puppet versions.
  * EL 6
  * EL 7
  * EL 8
+ * EL 9
  * Suse 11
  * Suse 12
  * Suse 15
@@ -24,6 +25,7 @@ This module aims to support the current and previous major Puppet versions.
  * Ubuntu 16.04 LTS
  * Ubuntu 18.04 LTS
  * Ubuntu 20.04 LTS
+ * Ubuntu 22.04 LTS
 
 ### Parameters
 
