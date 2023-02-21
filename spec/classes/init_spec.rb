@@ -197,6 +197,7 @@ describe 'nisclient' do
                 'owner'   => 'root',
                 'group'   => 'root',
                 'mode'    => '0644',
+                'before'  => 'Service[nis_service]',
                 'content' => "example.com\n",
               },
             )

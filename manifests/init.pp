@@ -149,6 +149,7 @@ class nisclient (
         owner   => 'root',
         group   => 'root',
         mode    => '0644',
+        before  => Service['nis_service'],
         content => "${domainname}\n",
       }
     }
