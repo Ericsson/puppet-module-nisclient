@@ -14,7 +14,7 @@
 # @param service_name String name of NIS client service. 'USE_DEFAULTS' will use platform specific defaults provided by the module.
 #
 class nisclient (
-  Stdlib::Fqdn $domainname = $::facts['domain'],
+  Stdlib::Fqdn $domainname = $::facts['networking']['domain'],
   Stdlib::Host $server = '127.0.0.1',
   Boolean $broadcast = false,
   String[1] $package_ensure = 'installed',
